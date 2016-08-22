@@ -14,15 +14,15 @@ const http = require('http');
 
 const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [0,1,2,3,4,5,6];
-rule.hour = [16];
-rule.minute = [00];
+rule.hour = [17];
+rule.minute = [32];
 rule.seconds = [00];
 
 // uses the moment module to find the numerical value for the week of the year e.g. the week beggining 8th August 2016 is the 33rd week of the year
 
 const datetime = new Date();
-const day = moment().format('d')
-console.log(day)
+const dayOfWeek = moment().format('d')
+console.log(dayOfWeek)
 
 const controller = Botkit.slackbot({
     debug: true
@@ -45,11 +45,9 @@ function callUsers() {
 
 callUsers().then((users) => {
   var cleaners = users.map(user => {
-    return `<@${user.name}>`
-  })
-
-  var dayToClean = users.map(user => {
-    return user.day
+      if (user.day === dayOfWeek){
+        return `<@${user.name}>`
+      }
   })
 
 
@@ -57,7 +55,7 @@ callUsers().then((users) => {
 
   schedule.scheduleJob(rule, function() {
 
-    if (dayToClean === '1') { //if it's an even week send this webhook
+    // if (dayToClean === '1') { //if it's an even week send this webhook
     bot.sendWebhook({
       text: `${prettyCleaners}`, // prints the first array of names along with the clean message to slack
       channel: '#random', //goes to the random channel
@@ -83,32 +81,32 @@ callUsers().then((users) => {
         }
       ]
     })
-  } else { //if it's an odd week send this
-      bot.sendWebhook({
-        text: `${prettyCleaners}`,
-        channel: '#random',
-        attachments: [
-          {
-            "text": "Have you cleaned?",
-            "color": "#3AA3E3",
-            "attachment_type": "default",
-            "actions": [
-              {
-                "name": "yes",
-                "text": "Yes",
-                "type": "button",
-                "value": "yes"
-              },
-              {
-                "name": "no",
-                "text": "No",
-                "type": "button",
-                "value": "no"
-              }
-            ]
-          }
-        ]
-      })
-    }
+  // } else { //if it's an odd week send this
+  //     bot.sendWebhook({
+  //       text: `${prettyCleaners}`,
+  //       channel: '#random',
+  //       attachments: [
+  //         {
+  //           "text": "Have you cleaned?",
+  //           "color": "#3AA3E3",
+  //           "attachment_type": "default",
+  //           "actions": [
+  //             {
+  //               "name": "yes",
+  //               "text": "Yes",
+  //               "type": "button",
+  //               "value": "yes"
+  //             },
+  //             {
+  //               "name": "no",
+  //               "text": "No",
+  //               "type": "button",
+  //               "value": "no"
+  //             }
+  //           ]
+  //         }
+  //       ]
+  //     })
+  //   }
   })
 })
