@@ -14,15 +14,15 @@ const http = require('http');
 
 const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [0,1,2,3,4,5,6];
-rule.hour = 16;
-rule.minute = 55;
-rule.seconds = 00;
+rule.hour = [16];
+rule.minute = [00];
+rule.seconds = [00];
 
 // uses the moment module to find the numerical value for the week of the year e.g. the week beggining 8th August 2016 is the 33rd week of the year
 
 const datetime = new Date();
-const week = moment().format('w')
-console.log(week)
+const day = moment().format('d')
+console.log(day)
 
 const controller = Botkit.slackbot({
     debug: true
@@ -36,7 +36,7 @@ const bot = controller.spawn({
 })
 
 function callUsers() {
-  return rp('https://express-rethinkb-compose.herokuapp.com/users/')
+  return rp('http://localhost:3000/users')
   .then(response => {
     var result = JSON.parse(response)
     return result
@@ -44,13 +44,20 @@ function callUsers() {
 }
 
 callUsers().then((users) => {
-  var cleaners = users.map(person => {
-    return `<@${person.name}>`
+  var cleaners = users.map(user => {
+    return `<@${user.name}>`
   })
+
+  var dayToClean = users.map(user => {
+    return user.day
+  })
+
+
   var prettyCleaners = cleaners.join(', ')
 
   schedule.scheduleJob(rule, function() {
-    if (week % 2 === 0) { //if it's an even week send this webhook
+
+    if (dayToClean === '1') { //if it's an even week send this webhook
     bot.sendWebhook({
       text: `${prettyCleaners}`, // prints the first array of names along with the clean message to slack
       channel: '#random', //goes to the random channel
