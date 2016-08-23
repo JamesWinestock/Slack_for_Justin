@@ -15,7 +15,7 @@ const http = require('http');
 const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [0,1,2,3,4,5,6];
 rule.hour = [17];
-rule.minute = [46];
+rule.minute = [49];
 rule.seconds = [00];
 
 // uses the moment module to find the numerical value for the week of the year e.g. the week beggining 8th August 2016 is the 33rd week of the year
@@ -41,7 +41,7 @@ const controller = Botkit.slackbot({
 // define the url of my incoming webhook
 const bot = controller.spawn({
   incoming_webhook: {
-    url: "https://hooks.slack.com/services/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"
+    url: "https://hooks.slack.com/services/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"
   }
 })
 
