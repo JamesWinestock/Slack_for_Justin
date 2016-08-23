@@ -15,14 +15,24 @@ const http = require('http');
 const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [0,1,2,3,4,5,6];
 rule.hour = [17];
-rule.minute = [35];
+rule.minute = [03];
 rule.seconds = [00];
 
 // uses the moment module to find the numerical value for the week of the year e.g. the week beggining 8th August 2016 is the 33rd week of the year
 
 const datetime = new Date();
 const dayOfWeek = moment().format('d')
-console.log(dayOfWeek)
+const weekOfYear = moment().format('w')
+
+
+const weekToInteger = parseInt(weekOfYear)
+if(weekToInteger % 2 === 0) {
+  weekIWantToUse = "2"
+} else {
+  weekIWantToUse = "1"
+}
+console.log('day:',dayOfWeek)
+console.log('week:',weekIWantToUse)
 
 const controller = Botkit.slackbot({
     debug: true
@@ -31,7 +41,7 @@ const controller = Botkit.slackbot({
 // define the url of my incoming webhook
 const bot = controller.spawn({
   incoming_webhook: {
-    url: "https://hooks.slack.com/services/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"
+    url: "https://hooks.slack.com/services/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"
   }
 })
 
@@ -45,7 +55,7 @@ function callUsers() {
 
 callUsers().then((users) => {
   var cleaners = users.map(user => {
-      if (user.day === dayOfWeek){
+      if (user.day === dayOfWeek && user.week === weekIWantToUse){
         return `<@${user.name}>`
       }
   })
@@ -55,7 +65,7 @@ callUsers().then((users) => {
 
   schedule.scheduleJob(rule, function() {
 
-    { //if it's an even week send this webhook
+    // if (dayToClean === '1') { //if it's an even week send this webhook
     bot.sendWebhook({
       text: `${prettyCleaners}`, // prints the first array of names along with the clean message to slack
       channel: '#random', //goes to the random channel
@@ -81,5 +91,32 @@ callUsers().then((users) => {
         }
       ]
     })
+  // } else { //if it's an odd week send this
+  //     bot.sendWebhook({
+  //       text: `${prettyCleaners}`,
+  //       channel: '#random',
+  //       attachments: [
+  //         {
+  //           "text": "Have you cleaned?",
+  //           "color": "#3AA3E3",
+  //           "attachment_type": "default",
+  //           "actions": [
+  //             {
+  //               "name": "yes",
+  //               "text": "Yes",
+  //               "type": "button",
+  //               "value": "yes"
+  //             },
+  //             {
+  //               "name": "no",
+  //               "text": "No",
+  //               "type": "button",
+  //               "value": "no"
+  //             }
+  //           ]
+  //         }
+  //       ]
+  //     })
+  //   }
   })
 })
