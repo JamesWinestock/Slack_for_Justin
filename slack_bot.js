@@ -15,7 +15,7 @@ const http = require('http');
 const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [0,1,2,3,4,5,6];
 rule.hour = [17];
-rule.minute = [03];
+rule.minute = [46];
 rule.seconds = [00];
 
 // uses the moment module to find the numerical value for the week of the year e.g. the week beggining 8th August 2016 is the 33rd week of the year
@@ -91,32 +91,5 @@ callUsers().then((users) => {
         }
       ]
     })
-  // } else { //if it's an odd week send this
-  //     bot.sendWebhook({
-  //       text: `${prettyCleaners}`,
-  //       channel: '#random',
-  //       attachments: [
-  //         {
-  //           "text": "Have you cleaned?",
-  //           "color": "#3AA3E3",
-  //           "attachment_type": "default",
-  //           "actions": [
-  //             {
-  //               "name": "yes",
-  //               "text": "Yes",
-  //               "type": "button",
-  //               "value": "yes"
-  //             },
-  //             {
-  //               "name": "no",
-  //               "text": "No",
-  //               "type": "button",
-  //               "value": "no"
-  //             }
-  //           ]
-  //         }
-  //       ]
-  //     })
-  //   }
   })
 })
