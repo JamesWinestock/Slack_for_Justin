@@ -14,9 +14,19 @@ const http = require('http');
 
 const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [0,1,2,3,4,5,6];
-rule.hour = [17];
-rule.minute = [49];
+rule.hour = [11];
+rule.minute = [22];
 rule.seconds = [00];
+
+const inspiration = [
+  "I wish my bank account filled up as fast as the kitchen sink", "A positive attitude may not solve all your problems, but it will annoy enough people to make it worth it", "Why can't the kitchen clean itself? It gets dirty by itself!", "I can't believe I'm spending half my afternoon cleaning up the kitchen. I mean, half these plates aren't even mine.", "I understand the concept of cleaning. Just not as it applies to me.", "Cleaning is just putting stuff in less obvious places", "I love cleaning up messes I didn't make... so I became a dev!", "'I noticed the kitchen needed cleaning so I just did it' said no one ever.", "Cleaning can't kill you but why take the chance?", "Cleaning is coming, brace yourself", "Not sure if actually cleaning or just moving stuff slowly around the room...", "Cleaning? Aint nobody got time for that", "Makes you clean kitchen... because cleaners are coming this evening.", "Confucius says: 'You cannot clean something without first making something else dirty'", "I pitty the fool who doesn't clean the office kitchen!", "Half assed cleaning, half asses cleaning everywhere", "What I do have are a very particular set of skills, skills I have aquired over a very long career. Skills that make me a nightmare for people like you. If you clean the kitchen now, that'll be the end of it. But if you don't, I will look for you, I will find you, and I will make you clean.", "These dishes were cleaned easily, but they will be back and in greater numbers", "One does not simply leave the kitchen dirty after 4pm", ""
+]
+
+console.log(inspiration.length)
+
+var randomQuote = inspiration[Math.floor(Math.random() * inspiration.length)];
+
+console.log(randomQuote)
 
 // uses the moment module to find the numerical value for the week of the year e.g. the week beggining 8th August 2016 is the 33rd week of the year
 
@@ -41,7 +51,7 @@ const controller = Botkit.slackbot({
 // define the url of my incoming webhook
 const bot = controller.spawn({
   incoming_webhook: {
-    url: "https://hooks.slack.com/services/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"
+    url: "https://hooks.slack.com/services/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"
   }
 })
 
@@ -68,26 +78,26 @@ callUsers().then((users) => {
     // if (dayToClean === '1') { //if it's an even week send this webhook
     bot.sendWebhook({
       text: `${prettyCleaners}`, // prints the first array of names along with the clean message to slack
-      channel: '#random', //goes to the random channel
+      channel: '#cleaningtest', //goes to the random channel
       attachments: [
         {
-          "text": "Have you cleaned?",
+          "text": `${randomQuote}`,
           "color": "#3AA3E3",
           "attachment_type": "default",
-          "actions": [
-            { //buttons so the user can say they have cleaned. This is returned as JSON to a specifed address, for us it is our express app. You need to apply for a full slack app for these buttons to work
-              "name": "yes",
-              "text": "Yes",
-              "type": "button",
-              "value": "yes"
-            },
-            {
-              "name": "no",
-              "text": "No",
-              "type": "button",
-              "value": "no"
-            }
-          ]
+          // "actions": [
+          //   { //buttons so the user can say they have cleaned. This is returned as JSON to a specifed address, for us it is our express app. You need to apply for a full slack app for these buttons to work
+          //     "name": "yes",
+          //     "text": "Yes",
+          //     "type": "button",
+          //     "value": "yes"
+          //   },
+          //   {
+          //     "name": "no",
+          //     "text": "No",
+          //     "type": "button",
+          //     "value": "no"
+          //   }
+          // ]
         }
       ]
     })
